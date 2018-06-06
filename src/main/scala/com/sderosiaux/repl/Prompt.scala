@@ -1,6 +1,6 @@
 package com.sderosiaux.repl
 
-trait Console[F[_]] {
+trait Prompt[F[_]] {
   def showPrompt(): F[Unit]
   def readCommand(): F[Command]
 }
