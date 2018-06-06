@@ -6,17 +6,14 @@ import scala.io.StdIn
 
 class IOConsole extends Console[IO] {
   override def showPrompt(): IO[Unit] = IO {
-    print("db > ")
+    print("repl > ")
   }
 
   override def readCommand(): IO[Command] = {
-    for {
-      line <- IO(StdIn.readLine())
-    } yield
-      line match {
-        case ".tables" => ShowTables
-        case ".exit"   => Exit
-        case s         => Query(s)
-      }
+    IO(StdIn.readLine()).map {
+      case ".tables" => Command.ShowTables
+      case ".exit" => Command.Exit
+      case s => Command.Unknown(s)
+    }
   }
 }
