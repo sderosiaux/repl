@@ -1,4 +1,4 @@
-package com.sderosiaux.repl
+package com.sderosiaux.repl.database
 
 sealed trait Command
 

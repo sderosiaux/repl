@@ -2,16 +2,17 @@ package com.sderosiaux.repl
 
 import cats.effect.IO
 import org.scalatest.{FlatSpec, Matchers}
+import cats.implicits._
 
 class ReplTest extends FlatSpec with Matchers {
-  "The Repl" should "work" in {
-    val repl = new Repl[IO](new Database {
-      override def tables: List[String] = List("a", "b")
-    }, new Prompt[IO] {
-      override def showPrompt(): IO[Unit] = IO.unit
-      override def readCommand(): IO[Command] = IO.pure(Command.ShowTables)
-    })
 
-    repl.readAndEval.unsafeRunSync() shouldBe Result.Tables(List("a", "b"))
+  "The Repl" should "work" in {
+    val repl = new Repl[IO, String, String](new Prompt[IO, String, String] {
+      override def showPrompt(): IO[Unit] = IO.unit
+      override def readCommand(): IO[String] = IO.pure("hello")
+      override def shouldExit(res: String): Boolean = ???
+      override def evalCommand(cmd: String): IO[String] = IO("world")
+    })
+    repl.readAndEval.unsafeRunSync() shouldBe "world"
   }
 }

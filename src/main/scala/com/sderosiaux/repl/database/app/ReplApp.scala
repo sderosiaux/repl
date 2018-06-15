@@ -1,8 +1,10 @@
-package com.sderosiaux.repl
+package com.sderosiaux.repl.database.app
 
 import cats.effect.{ExitCode, IO, IOApp}
+import com.sderosiaux.repl.database.{Database, IOPrompt}
+import com.sderosiaux.repl.Repl
 
-object ReplLauncher extends IOApp {
+object ReplApp extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
     val db = new Database {
@@ -10,7 +12,7 @@ object ReplLauncher extends IOApp {
     }
 
     for {
-      _ <- new Repl(db, new IOPrompt).loop()
+      _ <- new Repl(new IOPrompt(db)).loop()
     } yield ExitCode.Success
   }
 
